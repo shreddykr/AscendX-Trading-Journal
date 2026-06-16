@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AscendX Journal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">ASCEND<span>X</span></div>
+            <nav class="nav-tabs" id="accountTabs"></nav>
+            <button class="add-tab-btn" id="addTabBtn">+ Add Account</button>
+            <button class="settings-toggle-btn" id="settingsBtn">⚙️ Settings</button>
+        </aside>
+        <main class="main-content">
+            <header class="dashboard-header">
+                <h1 id="activeAccountTitle">Select or Add an Account</h1>
+                <div class="account-badge" id="accountBadge">N/A</div>
+            </header>
+            <section class="stats-grid">
+                <div class="stat-card"><h3>Net P&L</h3><div class="value" id="statNetPnL">$0.00</div></div>
+                <div class="stat-card"><h3>Win Rate</h3><div class="value" id="statWinRate">0%</div></div>
+                <div class="stat-card"><h3>Profit Factor</h3><div class="value" id="statProfitFactor">0.00</div></div>
+                <div class="stat-card"><h3>Avg Win Day</h3><div class="value" id="statAvgWin">$0.00</div></div>
+                <div class="stat-card"><h3>Avg Loss Day</h3><div class="value" id="statAvgLoss">$0.00</div></div>
+                <div class="stat-card"><h3>Green vs Red</h3><div class="value" id="statGreenRed">0 / 0</div></div>
+            </section>
+            <section class="workspace">
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button id="prevMonth">◀</button>
+                        <h2 id="calendarMonthYear">Month Year</h2>
+                        <button id="nextMonth">▶</button>
+                    </div>
+                    <div class="calendar-weekdays">
+                        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                    </div>
+                    <div class="calendar-days" id="calendarDays"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <div class="modal-overlay" id="tabModal">
+        <div class="modal">
+            <h2>Configure New Account Tracker</h2>
+            <div class="form-group" style="margin-top:15px;"><label>Account Name</label><input type="text" id="accName" placeholder="e.g., Topstep NQ 150k"></div>
+            <div class="form-group"><label>Market Type</label><select id="accMarket"><option value="Indices">Indices (NQ/ES)</option><option value="Stocks">Stocks</option><option value="Crypto">Crypto</option><option value="Forex">Forex</option></select></div>
+            <div class="modal-actions"><button class="cancel-btn" id="closeModalBtn">Cancel</button><button class="confirm-btn" id="saveAccountBtn">Create Tracker</button></div>
+        </div>
+    </div>
+    
+    <!-- Updated P&L Entry Modal to Ask for Trades Count -->
+    <div class="modal-overlay" id="pnlModal">
+        <div class="modal">
+            <h2 id="pnlModalTitle">Log P&L</h2>
+            <div class="form-group" style="margin-top:15px;">
+                <label>Net Profit / Loss ($)</label>
+                <input type="number" id="dailyPnLInput" placeholder="e.g., 1250 or -450">
+            </div>
+            <div class="form-group">
+                <label>Total Trades Taken</label>
+                <input type="number" id="dailyTradesInput" min="0" placeholder="e.g., 5">
+            </div>
+            <div class="modal-actions">
+                <button class="cancel-btn" id="closePnlModalBtn">Cancel</button>
+                <button class="confirm-btn" id="savePnLBtn">Lock In Trade</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal" style="max-width: 500px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;"><h2>Platform Settings</h2><button class="cancel-btn" id="closeSettingsBtn" style="font-size: 1.2rem;">✕</button></div>
+            <div class="form-group"><label style="font-weight: bold; margin-bottom: 10px;">Manage Trackers</label><div class="account-manage-list" id="settingsAccountList"></div></div>
+            <div style="margin-top: 25px; border-top: 1px solid #172030; padding-top: 20px;"><button class="hold-wipe-btn" id="triggerGlobalWipeBtn" style="width:100%; border: 1px solid var(--neon-red); background: transparent; color: var(--neon-red); padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer;">⚠️ WIPE ENTIRE DATABASE</button></div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="confirmModal" style="z-index: 200;">
+        <div class="modal" style="text-align: center; max-width: 420px; border-color: var(--neon-red);">
+            <div class="modal-alert-icon">⚠️</div><h2>Verification Required</h2><p id="confirmWarningText" style="color: var(--text-main); font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;"></p>
+            <div class="hold-action-container"><button class="hold-confirm-execute" id="holdDeleteBtn"><div class="progress-fill" id="holdProgressBar"></div><span class="btn-text" id="holdBtnText">Hold to Confirm (5s)</span></button></div>
+            <div style="margin-top: 20px; text-align: left;"><button class="cancel-btn" id="closeConfirmBtn">Cancel</button></div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
