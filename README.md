@@ -64,7 +64,7 @@ To operate AscendX locally on your home network, your machine requires the follo
 
 If you find this tracking matrix helpful for optimizing your trading setups, feel free to support continued development:
 
-[![Buy Me A Coffee](https://buymeacoffee.com/skrscripts)
+[Buy me a coffee](https://buymeacoffee.com/skrscripts)
 
 ---
 
