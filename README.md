@@ -20,7 +20,10 @@ AscendX is a high-performance, locally hosted trading journal and calendar track
 
 The application utilizes an advanced, hardware-accelerated user viewport engineered to fit ultra-wide monitors, 4K television hubs, and multi-device platforms seamlessly.
 
-<img width="2556" height="862" alt="Screenshot 2026-06-16 145341" src="https://github.com/user-attachments/assets/208eb03e-5eaf-48aa-91f8-4f9366589e09" />
+<img width="2557" height="862" alt="Screenshot 2026-06-16 145341" src="https://github.com/user-attachments/assets/43bd8303-02c8-453b-bb3d-4d587d23d5d5" />
+<img width="2557" height="862" alt="Screenshot 2026-06-16 145341" src="https://github.com/user-attachments/assets/1841078a-ccdc-46bf-8ef4-13bab64eace0" />
+
+
 
 ## ✨ System Features
 
