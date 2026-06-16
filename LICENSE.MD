@@ -1,4 +1,4 @@
-# ShreddyKR Script License  
+# ShreddyKR License  
   
 Copyright (c) 2026 ShreddyKR  
   
