@@ -1,6 +1,6 @@
 # AscendX Journal ⚡
 
-AscendX is a high-performance, locally hosted trading journal and calendar tracker engineered to run seamlessly across your private Wi-Fi network. Built using standalone vanilla JavaScript, HTML5, and fluid percent-based CSS grids, it features an ultra-smooth, high-refresh dashboard layout designed to deliver pixel-perfect visual analytics on everything from handheld mobile screens to high-end ultrawide monitors and 4K TV panels.
+AscendX is a locally hosted trading journal and calendar tracker designed to run within your private Wi-Fi network. Built using HTML5, CSS grid, and plain JavaScript, it automatically scales across PC, iPad, and mobile phone screens.
 
 ---
 
@@ -18,60 +18,60 @@ AscendX is a high-performance, locally hosted trading journal and calendar track
 
 ## 📹 Visual Dashboard Interface
 
-The application features a sleek, hardware-accelerated viewport designed to keep your trading metrics beautifully structured across different display platforms.
+The application features a responsive layout designed to keep your metrics organized across different screen sizes.
 
-<img width="2557" height="862" alt="AscendX Equity Cumulative Trendline Panel" src="https://github.com/user-attachments/assets/43bd8303-02c8-453b-bb3d-4d587d23d5d5" />
-<img width="2557" height="862" alt="AscendX Main Calendar Workspace Layout" src="https://github.com/user-attachments/assets/1841078a-ccdc-46bf-8ef4-13bab64eace0" />
+<img width="2557" height="862" alt="AscendX Equity Cumulative Trendline Panel" src="https://github.com" />
+<img width="2557" height="862" alt="AscendX Main Calendar Workspace Layout" src="https://github.com" />
 
 ---
 
 ## ✨ System Features
 
-* **Automated Multi-Device Sync**: Data storage has been moved completely off isolated browser cache partitions and written directly to your host PC's hard drive (`database.json`). Your desktop computer, iPad, and phone automatically read, write, and pull logs from the exact same file over Wi-Fi.
-* **Balanced 5-Column Metrics Matrix**: Provides direct mathematical counters for your cumulative Net P&L, percentage-based Win Rate, Profit Factor, Avg Trades per day, and Green vs Red winning/losing session histories.
-* **Inline Monthly P&L Headers**: The cumulative profit or loss generated over a specific calendar month view is calculated automatically and pinned right next to the header text, updating instantly when navigating between months.
-* **Perfect Mid-Aligned Calendar Geometry**: Calendar date numbers anchor cleanly in the upper left corner of grid cells, forcing your net P&L dollar amounts and trade volume stats to align directly down the dead center of the blocks.
-* **Smart Overtrading Identification Alerts**: The engine tracks your personalized, moving active trade history baseline. If a single calendar cell exceeds 135% of your historical trade average, it automatically triggers a neon orange dashed border alert with a custom warning tag.
-* **165Hz Neon White Equity Curve Graph**: Positioned perfectly right beneath your calendar workspace container. The line panel uses a high-frame-rate rendering loop (`requestAnimationFrame`) to map asset growth waves across a doubled vertical view canvas with neon white lighting.
-* **Personalized Undo Integration**: If you log trade data into the wrong calendar block, simply open the box, input `0` (or leave it blank) across both entry logs, and save. The calendar cell will instantly purge the index, resetting its colors back to normal.
-* **165Hz Security Hold Verification**: Interactive single-account removals and terminal database wipes require engaging a custom hold-to-confirm progress button that fills smoothly at high refresh rates.
-* **Responsive Touch-Scrolling Sidebar**: Sidebar layout handles its own internal scrolling mechanics with iOS inertial swipe physics, allowing you to access menu settings on an iPad or phone without shifting screen geometry.
+* **Multi-Device Data Sync**: Data is saved directly to your host PC's hard drive (`database.json`) instead of individual browser memory. Your PC, iPad, and phone all read and update the same file automatically over your Wi-Fi network.
+* **5-Column Metrics Matrix**: Displays real-time calculations for cumulative Net P&L, Win Rate, Profit Factor, Average Trades per day, and Green vs Red winning/losing day counts.
+* **Inline Monthly P&L**: Automatically calculates and displays the net profit or loss for the current month view directly in the calendar header. The number updates instantly when you switch months.
+* **Centered Calendar Layout**: Date numbers are pinned to the top-left corner of each cell, keeping your P&L amounts and trade counts perfectly centered in the middle of the box.
+* **Overtrading Alerts**: Tracks your moving active trade average. If you take significantly more trades than your usual baseline on a single day, the calendar cell automatically highlights with an orange dashed border and an overtraded warning.
+* **Cumulative Performance Graph**: Displays a clean, white trendline chart directly underneath the calendar workspace to track your equity curve over time.
+* **Data Correction**: If you log data onto the wrong day, opening that box, clearing the inputs (or entering `0`), and hitting save will completely remove that entry and reset the cell to normal.
+* **Hold-to-Confirm Deletions**: Account removals and database wipes require holding down the confirmation button for 5 seconds to prevent accidental data loss.
+* **Responsive Touch Sidebar**: The left sidebar layout features independent touch scrolling, allowing you to access menu settings on an iPad or phone without breaking the dashboard view.
 
 ---
 
 ## 📦 System Requirements
 
-To operate AscendX locally on your network, your machine requires the following base infrastructure:
+To run AscendX locally on your network, your machine requires:
 
-* **Core Runtime**: [Node.js (LTS Stable Build Version)](https://nodejs.org)
-* **Internal Package Management**: Installed automatically via standard **npm** tools.
-* **Operating Framework**: Standalone Windows Command Prompt compatibility (`.bat` scripting execution).
+* **Core Runtime**: [Node.js (LTS Version)](https://nodejs.org)
+* **Package Management**: npm (installed automatically with Node.js)
+* **Operating System**: Windows Command Prompt compatibility (`.bat` script execution)
 
 ---
 
 ## 🔧 Installation & Initial Launch
 
 1. **Download and Extract**: Save the folder container to your computer directory and name the root folder exactly `trading-journal`.
-2. **Launch the Engine**: Double-click the `local-server.bat` file in your root directory. The batch script will automatically run an environment configuration check and pull down network modules via `npm install` on your first launch.
-3. **Network Routing Access Link**: Once initialized, copy the link displayed in the server terminal log window:
-   * **Host PC Access**: Open your browser and navigate directly to `http://localhost:8082`.
-   * **iPad / iPhone Wi-Fi Access**: Navigate to your PC's broadcasted local network IP address (e.g., `http://192.168.1.45:8082`).
-4. **Taking the Site Offline**: Simply close out the active command prompt terminal window on your main host computer.
+2. **Launch the Server**: Double-click the `local-server.bat` file. On the first launch, it will automatically download the required Express library dependencies via `npm install`.
+3. **Access the App**: Look at the command prompt window to find your access links:
+   * **On the Host PC**: Type `http://localhost:8082` into your web browser.
+   * **On iPad / Phone**: Connect to the same Wi-Fi network and type your PC's IP link (e.g., `http://192.168.1.45:8082`).
+4. **Closing the App**: Simply close out the active command prompt terminal window on your main host computer to take the server offline.
 
 ---
 
 ## 🔒 Storage & Data Maintenance Safety
 
-* **Storage Vector**: 100% of your account logs live locally within your host machine's hard drive files (`database.json`). No data ever leaves your computer or passes out to an external cloud data center.
-* **Automatic Cache Migration**: Opening the updated application for the first time will automatically scan any existing browser cache data (`localStorage`) from older versions, migrate the histories forward, and commit them permanently to the host disk file database.
+* **Storage Location**: 100% of your account logs live locally within your host machine's hard drive files (`database.json`). No data ever leaves your computer or is sent to external servers.
+* **Legacy Cache Migration**: Opening this version for the first time will automatically scan for any existing browser cache data (`localStorage`) from older versions, migrate the histories forward, and save them permanently to the host disk file database.
 
 ---
 
 ## ☕ Support the Platform
 
-If you find this tracking matrix helpful for optimizing your trading setups, feel free to support continued development: 
+If you find this tracking matrix helpful for organizing your trading setups, feel free to support continued development:
 
-[Buy me a coffee ☕](https://buymeacoffee.com/skrscripts)
+[Buy me a coffee ☕](https://buymeacoffee.com)
 
 ---
 
