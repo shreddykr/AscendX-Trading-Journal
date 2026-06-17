@@ -1,3 +1,4 @@
+
 # AscendX Journal ⚡
 
 AscendX is a high-performance, locally hosted trading journal and calendar tracker engineered to run seamlessly across your private Wi-Fi network. Built using standalone vanilla JavaScript, HTML5, and fluid percent-based CSS grids, it features an ultra-smooth, high-refresh dashboard layout designed to deliver pixel-perfect visual analytics on everything from handheld mobile screens to high-end ultrawide monitors and 4K TV panels.
@@ -23,7 +24,8 @@ The application features a sleek, hardware-accelerated viewport designed to keep
 <img width="2557" height="857" alt="Screenshot 2026-06-17 163957" src="https://github.com/user-attachments/assets/11649354-69b0-4887-ad6b-e2951ac21af2" />
 <img width="2557" height="860" alt="Screenshot 2026-06-17 163938" src="https://github.com/user-attachments/assets/f31b6ec2-26ec-4955-9c88-ca7ed956f8b2" />
 
-
+<img width="2557" height="862" alt="Screenshot 2026-06-17 164220" src="https://github.com/user-attachments/assets/c448edaf-c07d-4615-8545-9e7792906f30" />
+<img width="2557" height="862" alt="Screenshot 2026-06-17 163938" src="https://github.com/user-attachments/assets/ef99d283-3fd6-4be0-af40-40ff9127bf4f" />
 
 
 <img width="720" height="562" alt="Screenshot 2026-06-16 222122" src="https://github.com/user-attachments/assets/679054b6-2da5-49dc-a274-6448a40fd5e1" />
