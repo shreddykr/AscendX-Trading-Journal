@@ -22,6 +22,9 @@ The application features a sleek, hardware-accelerated viewport designed to keep
 
 <img width="2557" height="862" alt="AscendX Equity Cumulative Trendline Panel" src="https://github.com/user-attachments/assets/43bd8303-02c8-453b-bb3d-4d587d23d5d5" />
 <img width="2557" height="862" alt="AscendX Main Calendar Workspace Layout" src="https://github.com/user-attachments/assets/1841078a-ccdc-46bf-8ef4-13bab64eace0" />
+<img width="720" height="562" alt="Screenshot 2026-06-16 222122" src="https://github.com/user-attachments/assets/679054b6-2da5-49dc-a274-6448a40fd5e1" />
+<img width="670" height="647" alt="Screenshot 2026-06-16 222106" src="https://github.com/user-attachments/assets/d94c09cd-2e85-45fd-92ba-3356ddecc276" />
+
 
 ---
 
