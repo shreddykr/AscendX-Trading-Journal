@@ -131,7 +131,7 @@ To have the tunnel run as a background Windows service that survives reboots, ru
 cloudflared.exe service install <your-token>
 ```
 
-The server itself (`node server.js`) still needs to be running — keep using `local-server.bat`, or set it up as its own service.
+The server itself (`node server.js`) still needs to be running — keep using `local-server.bat`. The script automatically detects the installed `cloudflared` service, so it won't ask for a token file; it just launches the journal server while the service handles your domain.
 
 ---
 
