@@ -1,14 +1,13 @@
 const express = require('express');
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
-const nodemailer = require('nodemailer');
 const needle = require('needle');
 const crypto = require('crypto');
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
 
-// Lightweight .env loader (no external dependency) so SMTP / key overrides work locally.
+// Lightweight .env loader (no external dependency) so env overrides work locally.
 (function loadEnvFile() {
     const envPath = path.join(__dirname, '.env');
     if (!fs.existsSync(envPath)) return;
@@ -94,8 +93,23 @@ function decryptJSON(raw) {
     return JSON.parse(dec.toString('utf8'));
 }
 
-function sha256(value) {
-    return crypto.createHash('sha256').update(value).digest('hex');
+/* ==========================================================================
+   SECURITY QUESTIONS (email-free password recovery)
+   Users pick one at sign-up; the answer is stored only as a bcrypt hash and
+   is required to reset a forgotten password. No email provider needed.
+   ========================================================================== */
+const SECURITY_QUESTIONS = [
+    'What was the name of your first pet?',
+    'What city were you born in?',
+    'What was the make and model of your first car?',
+    "What is your mother's maiden name?",
+    'What was the name of your elementary school?',
+    'What is your favorite movie?',
+];
+
+// Normalize answers so capitalization / spacing differences still match.
+function normalizeAnswer(value) {
+    return String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
 }
 
 /* ==========================================================================
@@ -138,47 +152,6 @@ function writeJournal(userId, data) {
 }
 
 /* ==========================================================================
-   EMAIL TRANSPORT (nodemailer) - falls back to console logging locally
-   Configure real email by setting SMTP_HOST / SMTP_USER / SMTP_PASS env vars.
-   ========================================================================== */
-function getMailer() {
-    if (process.env.SMTP_HOST && process.env.SMTP_USER) {
-        return nodemailer.createTransport({
-            host: process.env.SMTP_HOST,
-            port: parseInt(process.env.SMTP_PORT || '587', 10),
-            secure: process.env.SMTP_SECURE === 'true',
-            auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
-        });
-    }
-    return null;
-}
-
-async function sendResetEmail(toEmail, resetLink) {
-    const mailer = getMailer();
-    if (!mailer) {
-        console.log('==================================================');
-        console.log('🔑 PASSWORD RESET REQUESTED (no SMTP configured)');
-        console.log(`   Account: ${toEmail}`);
-        console.log(`   Reset link (valid 1 hour): ${resetLink}`);
-        console.log('   Paste this link into the browser to set a new password.');
-        console.log('==================================================');
-        return;
-    }
-    await mailer.sendMail({
-        from: process.env.SMTP_FROM || process.env.SMTP_USER,
-        to: toEmail,
-        subject: 'AscendX Journal - Password Reset',
-        text: `You requested a password reset for your AscendX Journal account.\n\nOpen this link to choose a new password (valid for 1 hour):\n${resetLink}\n\nIf you did not request this, you can safely ignore this email.`,
-        html: `<div style="font-family:Segoe UI,Roboto,sans-serif;background:#05070b;color:#e2e8f0;padding:30px;border-radius:12px;max-width:480px;margin:auto;">
-            <h2 style="color:#00d2ff;">AscendX Journal</h2>
-            <p>You requested a password reset for your account.</p>
-            <p><a href="${resetLink}" style="display:inline-block;background:#1d4ed8;color:#fff;padding:12px 22px;border-radius:6px;text-decoration:none;font-weight:bold;">Choose a new password</a></p>
-            <p style="color:#94a3b8;font-size:0.85rem;">This link is valid for 1 hour. If you did not request this, you can ignore this email.</p>
-        </div>`,
-    });
-}
-
-/* ==========================================================================
    MIDDLEWARE
    ========================================================================== */
 app.use(express.json({ limit: '10mb' }));
@@ -214,11 +187,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.post('/api/auth/register', async (req, res) => {
     const email = String(req.body.email || '').toLowerCase().trim();
     const password = String(req.body.password || '');
+    const securityQuestion = String(req.body.securityQuestion || '').trim();
+    const securityAnswer = String(req.body.securityAnswer || '');
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
         return res.status(400).json({ error: 'Enter a valid email address.' });
     }
     if (password.length < 6) {
         return res.status(400).json({ error: 'Password must be at least 6 characters.' });
+    }
+    if (!SECURITY_QUESTIONS.includes(securityQuestion)) {
+        return res.status(400).json({ error: 'Choose a security question.' });
+    }
+    if (normalizeAnswer(securityAnswer).length < 2) {
+        return res.status(400).json({ error: 'Enter an answer to your security question.' });
     }
 
     const users = readUsers();
@@ -237,6 +218,8 @@ app.post('/api/auth/register', async (req, res) => {
         id,
         email,
         passwordHash: await bcrypt.hash(password, 10),
+        securityQuestion,
+        securityAnswerHash: await bcrypt.hash(normalizeAnswer(securityAnswer), 10),
         createdAt: new Date().toISOString(),
         reset: null,
     };
@@ -275,42 +258,43 @@ app.get('/api/auth/me', (req, res) => {
     res.status(401).json({ authenticated: false });
 });
 
-app.post('/api/auth/forgot', async (req, res) => {
+// List of selectable security questions for the sign-up form.
+app.get('/api/auth/security-questions', (req, res) => {
+    res.json({ questions: SECURITY_QUESTIONS });
+});
+
+// Step 1 of recovery: look up the security question for an email.
+app.post('/api/auth/security-question', (req, res) => {
     const email = String(req.body.email || '').toLowerCase().trim();
     const users = readUsers();
     const user = users.find((u) => u.email === email);
-    if (user) {
-        const token = crypto.randomBytes(32).toString('hex');
-        user.reset = { tokenHash: sha256(token), expires: Date.now() + 1000 * 60 * 60 };
-        writeUsers(users);
-        const link = `${req.protocol}://${req.get('host')}/login.html?token=${token}`;
-        try {
-            await sendResetEmail(email, link);
-        } catch (e) {
-            console.error('Reset email send failure:', e.message);
-        }
+    if (!user) {
+        return res.status(404).json({ error: 'No account found for that email.' });
     }
-    // Always return the same response so attackers cannot probe which emails exist.
-    res.json({
-        success: true,
-        message: 'If an account exists for that email, a reset link has been sent.',
-    });
+    if (!user.securityQuestion) {
+        return res.status(400).json({
+            error: 'This account has no security question set. Contact the site owner for a manual reset.',
+        });
+    }
+    res.json({ question: user.securityQuestion });
 });
 
-app.post('/api/auth/reset', async (req, res) => {
-    const token = String(req.body.token || '');
+// Step 2 of recovery: verify the answer and set a new password.
+app.post('/api/auth/reset-security', async (req, res) => {
+    const email = String(req.body.email || '').toLowerCase().trim();
+    const answer = String(req.body.answer || '');
     const password = String(req.body.password || '');
-    if (!token || password.length < 6) {
-        return res
-            .status(400)
-            .json({ error: 'Invalid request. Password must be at least 6 characters.' });
+    if (password.length < 6) {
+        return res.status(400).json({ error: 'Password must be at least 6 characters.' });
     }
     const users = readUsers();
-    const user = users.find(
-        (u) => u.reset && u.reset.tokenHash === sha256(token) && u.reset.expires > Date.now()
-    );
-    if (!user) {
-        return res.status(400).json({ error: 'This reset link is invalid or has expired.' });
+    const user = users.find((u) => u.email === email);
+    if (!user || !user.securityAnswerHash) {
+        return res.status(400).json({ error: 'Could not verify your security answer.' });
+    }
+    const ok = await bcrypt.compare(normalizeAnswer(answer), user.securityAnswerHash);
+    if (!ok) {
+        return res.status(400).json({ error: 'That answer is incorrect.' });
     }
     user.passwordHash = await bcrypt.hash(password, 10);
     user.reset = null;
@@ -422,10 +406,6 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`💻 Local PC:       http://localhost:${PORT}`);
     console.log(`📶 Wi-Fi Access:   http://${localIP}:${PORT}`);
     console.log(`🔐 Encryption:     AES-256-GCM (per-user journal files)`);
-    if (!getMailer()) {
-        console.log(`📧 Email:          console fallback (set SMTP_* env vars for real emails)`);
-    } else {
-        console.log(`📧 Email:          SMTP configured (${process.env.SMTP_HOST})`);
-    }
+    console.log(`🔑 Recovery:       Security question (no email needed)`);
     console.log(`==================================================`);
 });

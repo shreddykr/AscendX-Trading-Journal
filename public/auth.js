@@ -1,6 +1,7 @@
 /* ==========================================================================
    ASCENDX AUTH CONTROLLER
-   Handles sign in, account creation, forgot-password, and reset flows.
+   Handles sign in, account creation, and email-free password recovery
+   via a security question chosen at sign-up.
    ========================================================================== */
 
 const banner = document.getElementById('authBanner');
@@ -37,11 +38,20 @@ async function postJSON(url, body) {
    -------------------------------------------------------------------------- */
 const authForm = document.getElementById('authForm');
 const forgotForm = document.getElementById('forgotForm');
-const resetForm = document.getElementById('resetForm');
 const authToggle = document.getElementById('authToggle');
 const confirmGroup = document.getElementById('confirmPasswordGroup');
+const securityQuestionGroup = document.getElementById('securityQuestionGroup');
+const securityAnswerGroup = document.getElementById('securityAnswerGroup');
+const securityQuestionSelect = document.getElementById('securityQuestion');
+const securityAnswerInput = document.getElementById('securityAnswer');
 const authSubmit = document.getElementById('authSubmit');
 const authPasswordConfirm = document.getElementById('authPasswordConfirm');
+
+// Recovery-flow references
+const recoverStep1 = document.getElementById('recoverStep1');
+const recoverStep2 = document.getElementById('recoverStep2');
+const recoverQuestion = document.getElementById('recoverQuestion');
+let recoverEmail = '';
 
 let mode = 'login'; // 'login' | 'register'
 
@@ -53,6 +63,8 @@ function setMode(newMode) {
     });
     const isRegister = newMode === 'register';
     confirmGroup.style.display = isRegister ? 'flex' : 'none';
+    securityQuestionGroup.style.display = isRegister ? 'flex' : 'none';
+    securityAnswerGroup.style.display = isRegister ? 'flex' : 'none';
     authSubmit.textContent = isRegister ? 'Create Account' : 'Sign In';
     document.getElementById('authPassword').autocomplete = isRegister
         ? 'new-password'
@@ -62,9 +74,31 @@ function setMode(newMode) {
 function showView(view) {
     authForm.style.display = view === 'auth' ? 'block' : 'none';
     forgotForm.style.display = view === 'forgot' ? 'block' : 'none';
-    resetForm.style.display = view === 'reset' ? 'block' : 'none';
     authToggle.style.display = view === 'auth' ? 'flex' : 'none';
+    if (view === 'forgot') {
+        recoverStep1.style.display = 'block';
+        recoverStep2.style.display = 'none';
+    }
     clearBanner();
+}
+
+/* --------------------------------------------------------------------------
+   Load the selectable security questions into the sign-up dropdown
+   -------------------------------------------------------------------------- */
+async function loadSecurityQuestions() {
+    try {
+        const res = await fetch('/api/auth/security-questions');
+        const { questions } = await res.json();
+        securityQuestionSelect.innerHTML = '';
+        (questions || []).forEach((q) => {
+            const opt = document.createElement('option');
+            opt.value = q;
+            opt.textContent = q;
+            securityQuestionSelect.appendChild(opt);
+        });
+    } catch (e) {
+        /* leave empty; register validation will catch a missing question */
+    }
 }
 
 /* --------------------------------------------------------------------------
@@ -83,6 +117,8 @@ authForm.addEventListener('submit', async (e) => {
     const email = document.getElementById('authEmail').value.trim();
     const password = document.getElementById('authPassword').value;
 
+    const body = { email, password };
+
     if (mode === 'register') {
         if (password.length < 6) {
             return showBanner('Password must be at least 6 characters.', 'error');
@@ -90,13 +126,23 @@ authForm.addEventListener('submit', async (e) => {
         if (password !== authPasswordConfirm.value) {
             return showBanner('Passwords do not match.', 'error');
         }
+        const securityQuestion = securityQuestionSelect.value;
+        const securityAnswer = securityAnswerInput.value.trim();
+        if (!securityQuestion) {
+            return showBanner('Choose a security question.', 'error');
+        }
+        if (securityAnswer.length < 2) {
+            return showBanner('Enter an answer to your security question.', 'error');
+        }
+        body.securityQuestion = securityQuestion;
+        body.securityAnswer = securityAnswer;
     }
 
     authSubmit.disabled = true;
     authSubmit.textContent = mode === 'register' ? 'Creating…' : 'Signing in…';
 
     const endpoint = mode === 'register' ? '/api/auth/register' : '/api/auth/login';
-    const { ok, payload } = await postJSON(endpoint, { email, password });
+    const { ok, payload } = await postJSON(endpoint, body);
 
     if (ok) {
         window.location.href = '/';
@@ -109,70 +155,71 @@ authForm.addEventListener('submit', async (e) => {
 });
 
 /* --------------------------------------------------------------------------
-   Forgot password flow
+   Password recovery flow (security question, no email)
    -------------------------------------------------------------------------- */
 document.getElementById('forgotLink').addEventListener('click', () => showView('forgot'));
 document.getElementById('backToLoginLink').addEventListener('click', () => showView('auth'));
 
+// Step 1: look up the account's security question by email.
+document.getElementById('forgotContinue').addEventListener('click', async () => {
+    const email = document.getElementById('forgotEmail').value.trim();
+    if (!email) {
+        return showBanner('Enter your account email.', 'error');
+    }
+    const btn = document.getElementById('forgotContinue');
+    btn.disabled = true;
+    btn.textContent = 'Checking…';
+    const { ok, payload } = await postJSON('/api/auth/security-question', { email });
+    btn.disabled = false;
+    btn.textContent = 'Continue';
+    if (!ok) {
+        return showBanner(payload.error || 'Could not look up that account.', 'error');
+    }
+    recoverEmail = email;
+    recoverQuestion.textContent = payload.question;
+    recoverStep1.style.display = 'none';
+    recoverStep2.style.display = 'block';
+    clearBanner();
+});
+
+// Step 2: verify the answer and set a new password.
 forgotForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const email = document.getElementById('forgotEmail').value.trim();
-    const submit = document.getElementById('forgotSubmit');
-    submit.disabled = true;
-    submit.textContent = 'Sending…';
-    const { payload } = await postJSON('/api/auth/forgot', { email });
-    showBanner(
-        payload.message || 'If an account exists for that email, a reset link has been sent.',
-        'info'
-    );
-    submit.disabled = false;
-    submit.textContent = 'Send Reset Link';
-});
-
-/* --------------------------------------------------------------------------
-   Reset password flow (triggered by ?token= in the URL)
-   -------------------------------------------------------------------------- */
-const resetToken = new URLSearchParams(window.location.search).get('token');
-
-document.getElementById('resetBackLink').addEventListener('click', () => {
-    history.replaceState(null, '', window.location.pathname);
-    showView('auth');
-});
-
-resetForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const password = document.getElementById('resetPassword').value;
-    const confirm = document.getElementById('resetPasswordConfirm').value;
+    const answer = document.getElementById('recoverAnswer').value.trim();
+    const password = document.getElementById('recoverPassword').value;
+    const confirm = document.getElementById('recoverPasswordConfirm').value;
+    if (!answer) {
+        return showBanner('Enter your answer.', 'error');
+    }
     if (password.length < 6) {
         return showBanner('Password must be at least 6 characters.', 'error');
     }
     if (password !== confirm) {
         return showBanner('Passwords do not match.', 'error');
     }
-    const submit = document.getElementById('resetSubmit');
+    const submit = document.getElementById('recoverSubmit');
     submit.disabled = true;
-    submit.textContent = 'Updating…';
-    const { ok, payload } = await postJSON('/api/auth/reset', { token: resetToken, password });
+    submit.textContent = 'Resetting…';
+    const { ok, payload } = await postJSON('/api/auth/reset-security', {
+        email: recoverEmail,
+        answer,
+        password,
+    });
+    submit.disabled = false;
+    submit.textContent = 'Reset Password';
     if (ok) {
-        history.replaceState(null, '', window.location.pathname);
         showView('auth');
         showBanner('Password updated. You can now sign in.', 'success');
     } else {
         showBanner(payload.error || 'Could not reset password.', 'error');
-        submit.disabled = false;
-        submit.textContent = 'Update Password';
     }
 });
 
 /* --------------------------------------------------------------------------
    Boot: if already signed in, go straight to the dashboard.
-   If a reset token is present, open the reset view.
    -------------------------------------------------------------------------- */
 (async function boot() {
-    if (resetToken) {
-        showView('reset');
-        return;
-    }
+    loadSecurityQuestions();
     try {
         const res = await fetch('/api/auth/me');
         if (res.ok) {
