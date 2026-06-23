@@ -21,15 +21,13 @@ AscendX is a high-performance, locally hosted trading journal and calendar track
 
 The application features a sleek, hardware-accelerated viewport designed to keep your trading metrics beautifully structured across different display platforms.
 
-<img width="2557" height="860" alt="Screenshot 2026-06-17 163938" src="https://github.com/user-attachments/assets/f31b6ec2-26ec-4955-9c88-ca7ed956f8b2" />
-<img width="2557" height="857" alt="Screenshot 2026-06-17 163957" src="https://github.com/user-attachments/assets/11649354-69b0-4887-ad6b-e2951ac21af2" />
-
-<img width="2557" height="862" alt="Screenshot 2026-06-17 164220" src="https://github.com/user-attachments/assets/c448edaf-c07d-4615-8545-9e7792906f30" />
-<img width="2557" height="862" alt="Screenshot 2026-06-17 163938" src="https://github.com/user-attachments/assets/ef99d283-3fd6-4be0-af40-40ff9127bf4f" />
-
-
-<img width="720" height="562" alt="Screenshot 2026-06-16 222122" src="https://github.com/user-attachments/assets/679054b6-2da5-49dc-a274-6448a40fd5e1" />
-<img width="670" height="647" alt="Screenshot 2026-06-16 222106" src="https://github.com/user-attachments/assets/d94c09cd-2e85-45fd-92ba-3356ddecc276" />
+<img width="286" height="302" alt="Screenshot 2026-06-22 220148" src="https://github.com/user-attachments/assets/0c00aded-6f7c-470d-a40f-c8592f7f0575" />
+<img width="275" height="229" alt="Screenshot 2026-06-22 220127" src="https://github.com/user-attachments/assets/dc5129f9-7568-4f07-9edd-a48aee9fee6a" />
+<img width="959" height="407" alt="Screenshot 2026-06-22 220106" src="https://github.com/user-attachments/assets/1f25eb3a-f5cb-4006-aef5-b0e15740a53a" />
+<img width="959" height="410" alt="Screenshot 2026-06-22 220048" src="https://github.com/user-attachments/assets/3f2d6969-dccc-4572-8ce0-f691fab878a4" />
+<img width="959" height="408" alt="Screenshot 2026-06-22 220030" src="https://github.com/user-attachments/assets/4bad27c1-bb8f-4a9f-b549-372ec8cce5fd" />
+<img width="959" height="408" alt="Screenshot 2026-06-22 220014" src="https://github.com/user-attachments/assets/ff786bfc-adad-4541-92b6-d8a168fd0689" />
+<img width="959" height="409" alt="Screenshot 2026-06-17 163938" src="https://github.com/user-attachments/assets/1a0124b6-6da9-4688-9328-c63d25414c2d" />
 
 
 ---
