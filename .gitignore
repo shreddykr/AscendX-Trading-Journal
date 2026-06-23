@@ -6,3 +6,7 @@ database.json
 
 # Environment / secrets
 .env
+
+# Cloudflare Tunnel (client binary + private connector token)
+cloudflared.exe
+cloudflared.token
