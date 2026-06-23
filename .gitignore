@@ -1,0 +1,8 @@
+node_modules/
+
+# Local user data — private, never committed
+data/
+database.json
+
+# Environment / secrets
+.env

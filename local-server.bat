@@ -1,12 +1,11 @@
 @echo off
-title Local Trading Journal Server
+title AscendX Journal Secure Server
+setlocal EnableDelayedExpansion
 cd /d "%~dp0"
 
-if not exist "node_modules\" (
-    echo [SYSTEM] First-time setup: Installing required modules...
-    call npm install
-)
+echo [SYSTEM] Verifying core + security libraries (express, bcryptjs, sessions, nodemailer, needle)...
+call npm install --no-audit --no-fund --quiet
 
-echo [SYSTEM] Starting server...
+echo [SYSTEM] All libraries verified. Launching secure local data core...
 node server.js
 pause
