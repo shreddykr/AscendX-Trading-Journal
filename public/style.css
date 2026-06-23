@@ -1,99 +1,121 @@
 :root {
-    --bg-dark: #05070b; --panel-dark: #0d111a; --panel-sub: #121824; --accent-glow: #00d2ff;
+    --bg-dark: #05070b; --panel-dark: #0d111a; --panel-sub: #121824; --accent-glow: #00ff87;
     --neon-green: #00ff87; --neon-red: #ff0055; --text-main: #e2e8f0; --text-muted: #4a5568;
     --transition-snappy: cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+
 body { 
     background-color: var(--bg-dark); 
     color: var(--text-main); 
-    overflow: hidden; 
-    height: 100vh; 
-    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+    min-height: 100vh; 
+    width: 100%;
 }
-.app-container { display: flex; height: 100vh; width: 100vw; }
 
-/* Sidebar Width Configurations */
-.sidebar { width: 280px; min-width: 280px; background: var(--panel-dark); border-right: 1px solid #172030; display: flex; flex-direction: column; padding: 20px; gap: 15px; }
-.logo { font-size: 1.4rem; font-weight: 900; letter-spacing: 2px; color: var(--text-main); margin-bottom: 10px; }
+/* Base Application Wrapper Flex Alignment Container */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+}
+
+.main-content {
+    min-width: 0;
+}
+
+/* Sidebar - Position Fixed Locks the Container and Border to the Glass Viewport Screen */
+.sidebar { 
+    width: 280px; 
+    min-width: 280px; 
+    background: var(--panel-dark); 
+    border-right: 1px solid #172030; 
+    display: flex; 
+    flex-direction: column; 
+    padding: 20px; 
+    gap: 15px; 
+    
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100vh; 
+    z-index: 10;
+    
+    overflow-y: auto; 
+    -webkit-overflow-scrolling: touch; /* inertial smooth touch scrolling for iPads/iphones */
+}
+
+/* Interactive Branding Logo */
+.logo { 
+    font-size: 1.4rem; 
+    font-weight: 900; 
+    letter-spacing: 2px; 
+    color: var(--text-main); 
+    margin-bottom: 10px; 
+    flex-shrink: 0; 
+    text-decoration: none; 
+    cursor: pointer;       
+    display: block;        
+}
 .logo span { color: var(--accent-glow); text-shadow: 0 0 12px var(--accent-glow); }
-.nav-tabs { display: flex; flex-direction: column; gap: 10px; flex-grow: 1; overflow-y: auto; }
-.nav-tabs::-webkit-scrollbar { width: 4px; }
-.nav-tabs::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
-.account-tab { background: var(--panel-sub); padding: 14px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s var(--transition-snappy); }
-.account-tab:hover { border-color: var(--accent-glow); }
-.account-tab.active { background: linear-gradient(135deg, #101726, #070a10); border: 1px solid var(--accent-glow); box-shadow: 0 0 15px rgba(0, 210, 255, 0.15); }
-.add-tab-btn { background: linear-gradient(90deg, #1d4ed8, #0284c7); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: transform 0.2s; }
-.add-tab-btn:hover { transform: scale(1.02); }
-.settings-toggle-btn { background: #151f32; border: 1px solid #233350; color: var(--text-main); padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; text-align: left; transition: background 0.2s; }
-.settings-toggle-btn:hover { background: #202e4a; border-color: var(--accent-glow); }
 
-/* Main Content Workspace Sizing Rules */
-.main-content { flex-grow: 1; padding: 24px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; height: 100vh; }
+.nav-tabs { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
+.account-tab { background: var(--panel-sub); padding: 14px; border-radius: 8px; cursor: pointer; border: 1px solid rgba(255,255,255,0.03); display: flex; justify-content: space-between; align-items: center; transition: background 0.3s, border-color 0.3s, transform 0.3s cubic-bezier(0.25,1,0.5,1), box-shadow 0.3s; transform: translateY(0); position: relative !important; overflow: hidden !important; }
+.account-tab:not(.active)::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.10) 50%, transparent 100%); width: 200%; transform: translateX(-100%); pointer-events: none; opacity: 0; transition: opacity 0.15s ease-out; } .account-tab:not(.active):hover { border-color: rgba(0,230,118,0.2); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.4); } .account-tab:not(.active):hover::before { opacity: 1; animation: luxurious-glide 4s ease-in-out infinite; } @keyframes luxurious-glide { 0%, 100% { transform: translateX(-50%); } 50% { transform: translateX(0%); } }
+.account-tab.active { background: linear-gradient(135deg, #070a10 0%, #101726 25%, rgba(0, 230, 118, 0.15) 50%, #101726 75%, #070a10 100%); background-size: 380% 380%; animation: wave 9s ease infinite; border: 1px solid var(--accent-glow); box-shadow: 0 0 20px rgba(0,230,118,0.2), inset 0 0 12px rgba(255,255,255,0.05); } @keyframes wave { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } } .account-tab.active:hover { transform: translateY(0); box-shadow: 0 0 25px rgba(0,230,118,0.3); }
+.add-tab-btn { background: var(--panel-sub); padding: 14px; border-radius: 8px; cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.03); display: flex; justify-content: center; align-items: center; font-weight: bold; color: #ffffff; flex-shrink: 0; transition: background 0.3s, border-color 0.3s, transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s; transform: translateY(0); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02); }
+.add-tab-btn:hover { border-color: rgba(0, 230, 118, 0.4); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 230, 118, 0.08); } .add-tab-btn:active { background: linear-gradient(135deg, #070a10 0%, #101726 35%, rgba(0, 230, 118, 0.15) 50%, #101726 65%, #070a10 100%); background-size: 300% 300%; animation: wave 6s ease infinite; border: 1px solid rgba(0, 230, 118, 0.8); box-shadow: 0 0 20px rgba(0, 230, 118, 0.25), inset 0 0 12px rgba(255, 255, 255, 0.05); transform: translateY(0); }
+
+.settings-toggle-btn { background: #151f32; border: 1px solid #233350; color: var(--text-main); padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; text-align: left; transition: background 0.2s; flex-shrink: 0; margin-bottom: 20px; }
+.settings-toggle-btn:hover { background: #202e4a; border-color: var(--accent-glow); }
+/* Main Content Workspace Layer */
+.main-content { 
+    flex-grow: 1;
+    min-width: 0;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: auto;
+    min-height: 100vh;
+    margin-left: 280px;
+}
+
 .dashboard-header { display: flex; justify-content: space-between; align-items: center; }
 .account-badge { background: rgba(0, 210, 255, 0.05); border: 1px solid #172a45; color: var(--accent-glow); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; }
 
-/* 6-Column Performance Matrix Grid Layout */
-.stats-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; width: 100%; }
+/* Balanced 5-Column Metrics Row Matrix Grid */
+.stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; width: 100%; flex-shrink: 0; }
 .stat-card { background: var(--panel-dark); border-radius: 10px; padding: 16px 18px; border: 1px solid #172030; }
 .stat-card h3 { color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 6px; }
 .stat-card .value { font-size: 1.5rem; font-weight: 800; }
 
 /* Fluid Full-Width Calendar Container Layout */
-.calendar-container { background: var(--panel-dark); border-radius: 14px; padding: 20px; border: 1px solid #172030; overflow: hidden; box-sizing: border-box; width: 100%; flex-grow: 1; display: flex; flex-direction: column; }
+.calendar-container { background: var(--panel-dark); border-radius: 14px; padding: 10px; border: 1px solid #172030; overflow: hidden; box-sizing: border-box; width: 100%; flex-shrink: 0; display: flex; flex-direction: column; min-height: 450px; }
 .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.calendar-header h2 { font-size: 1.3rem; }
+.calendar-header h2 { font-size: 1.3rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; }
 .calendar-header button { background: var(--panel-sub); border: 1px solid #172030; color: white; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
 .calendar-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; color: var(--text-muted); font-weight: 600; font-size: 0.9rem; margin-bottom: 10px; }
-.calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; flex-grow: 1; }
+.calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
 
-/* Perfectly Centered Day Grid Cells */
-.day-cell { 
-    background: var(--panel-sub); 
-    aspect-ratio: 1.6; 
-    border-radius: 6px; 
-    padding: 8px 10px; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: center; /* Centers text vertically in the middle */
-    align-items: center;     /* Centers text horizontally in the middle */
-    position: relative;      /* Keeps the day number anchored in place */
-    cursor: pointer; 
-    border: 1px solid transparent; 
-    transition: background 0.15s, border-color 0.15s; 
-}
+/* Centered Day Grid Matrix Cells */
+.day-cell { background: var(--panel-sub); aspect-ratio: 1.6; border-radius: 6px; padding: 8px 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; cursor: pointer; border: 1px solid transparent; transition: background 0.15s, border-color 0.15s; }
 .day-cell:hover { background: #141c2b; border-color: #2e3b52; }
 
-/* Anchors Day Number to Top-Left Corner */
-.day-num { 
-    position: absolute;
-    top: 6px;
-    left: 8px;
-    font-weight: bold; 
-    color: #475569; 
-    font-size: 0.8rem; 
-}
+.day-num { position: absolute; top: 6px; left: 8px; font-weight: bold; color: #475569; font-size: 0.8rem; }
+.day-pnl { font-weight: 800; font-size: 1.15rem; text-align: center; margin-bottom: 2px; }
+.day-trades { font-size: 0.75rem; color: var(--text-muted); text-align: center; }
 
-/* Middle-Aligned Profit Text */
-.day-pnl { 
-    font-weight: 800; 
-    font-size: 1.15rem; /* Slightly enhanced text size for improved readability */
-    text-align: center;
-    margin-bottom: 2px;
-}
-
-/* Middle-Aligned Trade Count Label */
-.day-trades {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    text-align: center;
-}
-
-/* Highlight Today Accent Border */
 .day-cell.today-highlight { border: 2px solid var(--accent-glow) !important; box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
 .day-cell.today-highlight .day-num { color: var(--text-main); font-weight: 900; }
 
-/* P&L Performance Colors with Ambient Soft Glows */
+.day-cell.overtraded-alert { border: 1px dashed #ff9900 !important; }
+.day-cell.overtraded-alert .day-trades { color: #ff9900; font-weight: bold; }
+
 .day-cell.profit { background: rgba(0, 255, 135, 0.02); border-color: rgba(0, 255, 135, 0.1); }
 .day-cell.profit:hover { border-color: var(--neon-green); background: rgba(0, 255, 135, 0.05); }
 .day-cell.profit .day-pnl { color: var(--neon-green); text-shadow: 0 0 10px rgba(0, 255, 135, 0.3); }
@@ -101,6 +123,63 @@ body {
 .day-cell.loss { background: rgba(255, 0, 85, 0.02); border-color: rgba(255, 0, 85, 0.1); }
 .day-cell.loss:hover { border-color: var(--neon-red); background: rgba(255, 0, 85, 0.05); }
 .day-cell.loss .day-pnl { color: var(--neon-red); text-shadow: 0 0 10px rgba(255, 0, 85, 0.3); }
+/* Doubled Height Cumulative Line Chart Container Panel Area */
+.chart-panel {
+    background: var(--panel-dark);
+    border-radius: 14px;
+    padding: 24px 30px;
+    border: 1px solid #172030;
+    width: 100%;
+    height: 350px; 
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    margin-top: 15px;
+    margin-bottom: 50px; /* Provides complete layout buffer clearance at bottom of viewports */
+}
+#analyticsChart { width: 100%; height: 100%; display: block; }
+
+/* Floating Cumulative Asset Performance Graph Header Label */
+.chart-title-label {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    pointer-events: none; 
+    z-index: 5;
+}
+
+/* Active Emoji Tag Toggled State Highlight */
+.emoji-tag-btn.selected-active {
+    border-color: var(--accent-glow) !important;
+    background: rgba(0, 210, 255, 0.1) !important;
+    text-shadow: 0 0 8px var(--accent-glow);
+    box-shadow: 0 0 10px rgba(0, 210, 255, 0.15);
+}
+
+/* Horizontal Floating Row Along the Bottom of Calendar Cells */
+.day-emoji-row {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 4px;
+    height: 16px;
+    font-size: 0.85rem;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Custom Styled Scrollbar Engine Rules */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: #172030; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #233350; }
+* { scrollbar-width: thin; scrollbar-color: #172030 var(--bg-dark); }
 
 /* Structural Modals Layout */
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 5, 8, 0.95); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; z-index: 100; }
@@ -127,11 +206,405 @@ body {
 @keyframes jackpotFlash { 0% { background-color: var(--bg-dark); } 25% { background-color: rgba(0, 255, 135, 0.08); } 50% { background-color: var(--bg-dark); } 75% { background-color: rgba(0, 255, 135, 0.08); } 100% { background-color: var(--bg-dark); } }
 .jackpot-flash { animation: jackpotFlash 0.6s ease-in-out; }
 
-/* Custom Constraints for Ultrawide Monitors */
+/* Optimization Layer for Widescreens */
 @media (min-width: 2200px) {
     .day-cell { aspect-ratio: 2.2; }
     .stats-grid { gap: 20px; }
 }
+
+/* Mobile Phone Viewport Core Adaptations */
+@media (max-width: 768px) {
+    body, .app-container { overflow-y: auto; height: auto; }
+    .sidebar { width: 100vw; min-width: 100vw; height: auto; position: relative; border-right: none; border-bottom: 1px solid #172030; padding: 15px; gap: 10px; }
+    .logo { margin-bottom: 5px; text-align: center; }
+    .nav-tabs { flex-direction: row; overflow-x: auto; gap: 8px; width: 100%; padding-bottom: 5px; }
+    .account-tab { padding: 8px 12px; flex-shrink: 0; }
+    .add-tab-btn, .settings-toggle-btn { padding: 10px; font-size: 0.85rem; margin-bottom: 0; }
+    .main-content { margin-left: 0; padding: 15px; gap: 15px; height: auto; min-height: auto; max-height: none; overflow-y: visible; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .stat-card { padding: 12px; }
+    .stat-card .value { font-size: 1.2rem; }
+    .chart-panel { height: 180px; padding: 12px; margin-bottom: 15px; }
+    .workspace { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 10px; }
+    .calendar-container { min-width: 650px; padding: 15px; min-height: auto; }
+    .day-cell { aspect-ratio: 1.4; padding: 6px; }
+    .day-pnl { font-size: 0.95rem; }
+    .day-trades { font-size: 0.7rem; }
+}
+
+/* Low-Profile Sidebar Signature */
+.sidebar-signature {
+    text-align: center;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--text-muted); /* Matches the trade count color precisely */
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: auto;        /* Pushes the element to the bottom of the column grid */
+    padding-top: 15px;
+    opacity: 0.6;            /* Soft blending overlay effect */
+    user-select: none;
+    pointer-events: none;
+}
+
+/* Low-Profile Top Right Calendar News Flags */
+.day-news-flag-container {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    display: flex;
+    gap: 3px;
+    pointer-events: none;
+}
+.news-flag-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.news-flag-dot.high-impact {
+    background-color: var(--neon-red);
+    box-shadow: 0 0 6px var(--neon-red);
+}
+.news-flag-dot.med-impact {
+    background-color: #ffaa00;
+    box-shadow: 0 0 6px #ffaa00;
+}
+
+/* Financial Terminal Row Matrix Layout styles */
+.news-data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--panel-sub);
+    padding: 16px 20px;
+    transition: background 0.15s ease;
+    text-decoration: none;
+}
+.news-data-row:hover {
+    background: #162032;
+}
+.news-row-title {
+    font-weight: 600;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    max-width: 75%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.news-row-date {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    font-family: monospace;
+    letter-spacing: 0.5px;
+}
+.news-toggle-link:hover {
+    border-color: var(--accent-glow) !important;
+}
+.news-toggle-link.active-view {
+    background: linear-gradient(135deg, #101726, #070a10) !important;
+    border: 1px solid var(--accent-glow) !important;
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.15);
+}
+
+
+
+
+
+/* ==========================================================================
+   ASCENDX VISUAL REFINEMENTS - HOVER TRANSITIONS & DYNAMIC SHADOWS
+   ========================================================================== */
+
+/* Gives your background canvas a deep cyberpunk depth gradient */
+body {
+    background: radial-gradient(circle at 15% 15%, #0d1527 0%, #05070b 70%) !important;
+}
+
+/* Baseline state: Controls how smoothly the logo shrinks and fades out when your mouse leaves */
+.logo {
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), text-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+/* Hover state: Controls how slowly the logo expands and builds up the white neon glow */
+.logo:hover {
+    transform: scale(1.01) rotate(0deg) !important;
+    text-shadow: 0 0 16px rgba(255, 255, 255, 0.85), 0 0 6px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Smooth left border slide accent on sidebar tab buttons */
+.nav-tab-btn, .settings-toggle-btn, .add-tab-btn {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative;
+}
+.nav-tab-btn:hover, .settings-toggle-btn:hover {
+    color: #e2e8f0 !important;
+    background: #0d1322 !important;
+    padding-left: 20px !important;
+    box-shadow: inset 3px 0 0 #00ff87, inset 0 0 10px rgba(0, 210, 255, 0.05);
+}
+
+/* Enhanced active tab glowing neon aura selection frame */
+.nav-tab-btn.active {
+    background: #0e182b !important;
+    border-color: #1e355e !important;
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.12) !important;
+    color: #00ff87 !important;
+}
+
+/* Adds a smooth floating depth shift to your top metric summary cards */
+.stat-card {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+.stat-card:hover {
+    transform: translateY(-3px);
+    border-color: #23334d !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+
+
+/* ==========================================================================
+   ASCENDX VISUAL REFINEMENTS - CALENDAR POPS & JACKPOT SCREEN FLASHES
+   ========================================================================== */
+
+/* Makes your calendar date blocks scale up slightly with an ambient background shadow glow */
+.calendar-day-box {
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease !important;
+}
+.calendar-day-box:hover {
+    transform: scale(1.03) translateY(-1px);
+    border-color: #3b5278 !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    z-index: 5;
+}
+
+/* Green win day emerald pulsing glow loop track */
+.calendar-day-box.win-day:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5), 0 0 10px rgba(57, 255, 20, 0.2) !important;
+    border-color: #39ff14 !important;
+}
+
+/* Red loss day ruby pulsing glow loop track */
+.calendar-day-box.loss-day:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5), 0 0 10px rgba(255, 0, 85, 0.2) !important;
+    border-color: #ff0055 !important;
+}
+
+/* Smooth fade-in backdrop blur for configuration overlays */
+.modal-overlay {
+    backdrop-filter: blur(4px);
+    transition: opacity 0.2s ease !important;
+}
+
+/* Elastic spring transition when modal windows snap open */
+.modal {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* Snappy hover scaling on your behavioral tags */
+.emoji-tag-btn {
+    transition: transform 0.15s ease, background 0.15s ease !important;
+}
+.emoji-tag-btn:hover {
+    transform: scale(1.06);
+}
+.emoji-tag-btn.selected-active {
+    box-shadow: 0 0 12px rgba(0, 210, 255, 0.3) !important;
+}
+
+/* Screen Flash overlay when locking in a green win day entry matrix channel */
+.jackpot-flash::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(57, 255, 20, 0.08);
+    box-shadow: inset 0 0 80px rgba(57, 255, 20, 0.3);
+    pointer-events: none;
+    z-index: 99999;
+    animation: jackpotFlashPulse 1.75s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+@keyframes jackpotFlashPulse {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+
+
+/* ==========================================================================
+   ASCENDX REACTIVE MAGNETIC CURSOR GLOW CIRCLE STYLES
+   ========================================================================== */
+
+/* Enforce tracking constraints on element anchors to handle overflow */
+.stat-card, .nav-tab-btn, .settings-toggle-btn, .add-tab-btn, .calendar-day-box {
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* The actual hardware-accelerated glowing circle tracking pointer coordinates */
+.cursor-glow-circle-follower {
+    position: absolute !important;
+    left: var(--cursor-x, 0px) !important;
+    top: var(--cursor-y, 0px) !important;
+    width: 350px !important;  /* CHANGED: Expanded to 350px for a wide, soft premium aura */
+    height: 350px !important; /* CHANGED: Expanded to 350px for a wide, soft premium aura */
+    background: radial-gradient(circle, rgba(0, 210, 255, 0.06) 0%, rgba(0, 210, 255, 0) 75%) !important; /* Softened center weight */
+    transform: translate(-50%, -50%) !important;
+    pointer-events: none !important; /* Prevents circle from blocking mouse text selectors */
+    opacity: 0 !important;
+    transition: opacity 0.4s ease !important; /* Smooth fade-in and fade-out transition */
+    z-index: 1 !important;
+}
+
+/* Instantly activate the tracking beam when your cursor touches the layout area */
+.stat-card:hover .cursor-glow-circle-follower,
+.nav-tab-btn:hover .cursor-glow-circle-follower,
+.settings-toggle-btn:hover .cursor-glow-circle-follower,
+.add-tab-btn:hover .cursor-glow-circle-follower,
+.calendar-day-box:hover .cursor-glow-circle-follower {
+    opacity: 1 !important;
+}
+
+/* Specialty Emerald soft ambient tracking beam for win days */
+.calendar-day-box.win-day .cursor-glow-circle-follower {
+    background: radial-gradient(circle, rgba(57, 255, 20, 0.07) 0%, rgba(57, 255, 20, 0) 75%) !important;
+}
+
+/* Specialty Ruby soft ambient tracking beam for loss days */
+.calendar-day-box.loss-day .cursor-glow-circle-follower {
+    background: radial-gradient(circle, rgba(255, 0, 85, 0.07) 0%, rgba(255, 0, 85, 0) 75%) !important;
+}
+
+/* ==========================================================================
+   ASCENDX PERFORMANCE LOSS DYNAMIC SCREEN FLASH PIPELINE
+   ========================================================================== */
+
+/* Screen Flash overlay when locking in a red loss day entry */
+.loss-flash::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 0, 85, 0.12); /* Deep Crimson Ruby hue */
+    box-shadow: inset 0 0 100px rgba(255, 0, 85, 0.45); /* Intense vignette shadow pulse */
+    pointer-events: none;
+    z-index: 99999;
+    animation: lossFlashPulse 1.75s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+@keyframes lossFlashPulse {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+
+
+
+
+/* =====================================================
+   ASCENDX PREMIUM GREEN ACTION BUTTONS
+   ===================================================== */
+
+.confirm-btn,
+.create-tracker-btn,
+.lock-trade-btn,
+.auth-submit,
+.auth-toggle-btn.active,
+button.primary-action {
+    position: relative;
+    overflow: hidden;
+
+    background: linear-gradient(
+        135deg,
+        #00ff87 0%,
+        #00d66f 35%,
+        #00ff87 70%,
+        #00b85f 100%
+    ) !important;
+
+    color: #04110a !important;
+    font-weight: 800;
+    border: 1px solid rgba(0,255,135,0.35) !important;
+    border-radius: 10px;
+
+    box-shadow:
+        0 0 18px rgba(0,255,135,0.18),
+        inset 0 1px 0 rgba(255,255,255,0.25);
+
+    transition:
+        transform .25s cubic-bezier(.34,1.56,.64,1),
+        box-shadow .25s ease,
+        filter .25s ease;
+}
+
+/* Hover Lift */
+.confirm-btn:hover,
+.create-tracker-btn:hover,
+.lock-trade-btn:hover,
+.auth-submit:hover,
+button.primary-action:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 0 28px rgba(0,255,135,0.35),
+        0 8px 20px rgba(0,0,0,0.35);
+
+    filter: brightness(1.05);
+}
+
+/* Click Effect */
+.confirm-btn:active,
+.create-tracker-btn:active,
+.lock-trade-btn:active,
+.auth-submit:active,
+button.primary-action:active {
+    transform: translateY(0);
+}
+
+/* Shimmer Sweep */
+.confirm-btn::before,
+.create-tracker-btn::before,
+.lock-trade-btn::before,
+.auth-submit::before,
+.auth-toggle-btn.active::before,
+button.primary-action::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+
+    width: 60%;
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.35),
+        transparent
+    );
+
+    transform: skewX(-25deg);
+
+    animation: ascendxShimmer 3s linear infinite;
+}
+
+@keyframes ascendxShimmer {
+    0% {
+        left: -150%;
+    }
+    100% {
+        left: 250%;
+    }
+}
+
+/* Instantly deletes the big account headline text from the layout without touching your working JS file */
+#activeAccountTitle { display: none !important; }
 
 /* ==========================================================================
    AUTH SCREEN (Login / Create Account / Reset) — matches dashboard theme
@@ -144,7 +617,7 @@ body {
     justify-content: center;
     padding: 20px;
     background:
-        radial-gradient(circle at 20% 20%, rgba(0, 210, 255, 0.06), transparent 40%),
+        radial-gradient(circle at 20% 20%, rgba(0, 255, 135, 0.06), transparent 40%),
         radial-gradient(circle at 80% 80%, rgba(0, 255, 135, 0.05), transparent 40%),
         var(--bg-dark);
     overflow-y: auto;
@@ -156,7 +629,7 @@ body {
     border: 1px solid #172030;
     border-radius: 16px;
     padding: 36px 32px;
-    box-shadow: 0 0 40px rgba(0, 210, 255, 0.08);
+    box-shadow: 0 0 40px rgba(0, 255, 135, 0.08);
 }
 .auth-logo {
     font-size: 2rem;
@@ -197,26 +670,20 @@ body {
     transition: all 0.2s var(--transition-snappy);
 }
 .auth-toggle-btn.active {
-    background: linear-gradient(90deg, #1d4ed8, #0284c7);
-    color: white;
-    box-shadow: 0 0 14px rgba(0, 210, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+    color: #04110a;
+    box-shadow: 0 0 14px rgba(0, 255, 135, 0.2);
 }
 .auth-form .form-group { margin-bottom: 16px; }
 .auth-help { color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 18px; }
 .auth-submit {
     width: 100%;
-    background: linear-gradient(90deg, #1d4ed8, #0284c7);
-    color: white;
-    border: none;
     padding: 13px;
-    border-radius: 8px;
-    font-weight: bold;
     font-size: 0.95rem;
     cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.2s;
 }
-.auth-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0, 210, 255, 0.18); }
-.auth-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.auth-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; filter: none; }
 .auth-links { text-align: center; margin-top: 16px; }
 .auth-links a {
     color: var(--accent-glow);
@@ -236,7 +703,7 @@ body {
 .auth-banner.show { display: block; }
 .auth-banner.error { background: rgba(255, 0, 85, 0.08); border: 1px solid rgba(255, 0, 85, 0.3); color: #ff6b95; }
 .auth-banner.success { background: rgba(0, 255, 135, 0.08); border: 1px solid rgba(0, 255, 135, 0.25); color: var(--neon-green); }
-.auth-banner.info { background: rgba(0, 210, 255, 0.06); border: 1px solid rgba(0, 210, 255, 0.25); color: var(--accent-glow); }
+.auth-banner.info { background: rgba(0, 255, 135, 0.06); border: 1px solid rgba(0, 255, 135, 0.25); color: var(--accent-glow); }
 .auth-signature {
     text-align: center;
     color: var(--text-muted);

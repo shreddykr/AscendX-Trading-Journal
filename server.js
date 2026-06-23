@@ -45,7 +45,6 @@ const DATA_DIR = path.join(__dirname, 'data');
 const JOURNALS_DIR = path.join(DATA_DIR, 'journals');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const KEY_FILE = path.join(DATA_DIR, 'secret.key');
-const LEGACY_DB_FILE = path.join(__dirname, 'database.json');
 
 for (const dir of [DATA_DIR, JOURNALS_DIR]) {
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -244,20 +243,8 @@ app.post('/api/auth/register', async (req, res) => {
     users.push(user);
     writeUsers(users);
 
-    // First account on a fresh install inherits any pre-existing local database.json
-    // so the original single-user journal is not lost during the upgrade.
-    const isFirstUser = users.length === 1;
-    if (isFirstUser && fs.existsSync(LEGACY_DB_FILE)) {
-        try {
-            const legacy = JSON.parse(fs.readFileSync(LEGACY_DB_FILE, 'utf8'));
-            writeJournal(id, Array.isArray(legacy) ? legacy : []);
-        } catch (e) {
-            console.error('Legacy database import skipped:', e.message);
-            writeJournal(id, []);
-        }
-    } else {
-        writeJournal(id, []);
-    }
+    // Every new account starts with its own empty, independent journal file.
+    writeJournal(id, []);
 
     req.session.userId = id;
     req.session.email = email;
