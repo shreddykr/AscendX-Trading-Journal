@@ -514,6 +514,8 @@ body {
 .confirm-btn,
 .create-tracker-btn,
 .lock-trade-btn,
+.auth-submit,
+.auth-toggle-btn.active,
 button.primary-action {
     position: relative;
     overflow: hidden;
@@ -545,6 +547,7 @@ button.primary-action {
 .confirm-btn:hover,
 .create-tracker-btn:hover,
 .lock-trade-btn:hover,
+.auth-submit:hover,
 button.primary-action:hover {
     transform: translateY(-2px);
 
@@ -559,6 +562,7 @@ button.primary-action:hover {
 .confirm-btn:active,
 .create-tracker-btn:active,
 .lock-trade-btn:active,
+.auth-submit:active,
 button.primary-action:active {
     transform: translateY(0);
 }
@@ -567,6 +571,8 @@ button.primary-action:active {
 .confirm-btn::before,
 .create-tracker-btn::before,
 .lock-trade-btn::before,
+.auth-submit::before,
+.auth-toggle-btn.active::before,
 button.primary-action::before {
     content: '';
     position: absolute;
@@ -664,26 +670,20 @@ button.primary-action::before {
     transition: all 0.2s var(--transition-snappy);
 }
 .auth-toggle-btn.active {
-    background: linear-gradient(90deg, #1d4ed8, #0284c7);
-    color: white;
+    position: relative;
+    overflow: hidden;
+    color: #04110a;
     box-shadow: 0 0 14px rgba(0, 255, 135, 0.2);
 }
 .auth-form .form-group { margin-bottom: 16px; }
 .auth-help { color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 18px; }
 .auth-submit {
     width: 100%;
-    background: linear-gradient(90deg, #1d4ed8, #0284c7);
-    color: white;
-    border: none;
     padding: 13px;
-    border-radius: 8px;
-    font-weight: bold;
     font-size: 0.95rem;
     cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.2s;
 }
-.auth-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0, 255, 135, 0.18); }
-.auth-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.auth-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; filter: none; }
 .auth-links { text-align: center; margin-top: 16px; }
 .auth-links a {
     color: var(--accent-glow);
