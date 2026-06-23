@@ -37,14 +37,6 @@ async function loadStoredData() {
         const payload = await response.json(); 
         accounts = payload.journal || []; 
         newsEventsRawList = payload.newsRawFeed || []; // Safely extracts row list array package 
-        
-        if (accounts.length === 0) { 
-            let legacy = localStorage.getItem('ascendx_journal') || localStorage.getItem('quantumx_journal'); 
-            if (legacy) { 
-                accounts = JSON.parse(legacy); 
-                await saveAndBackup(); 
-            } 
-        } 
         renderTabs(); 
         if (accounts.length > 0) switchAccount(0); 
     } catch (err) { 
