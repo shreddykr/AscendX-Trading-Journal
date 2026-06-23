@@ -4,30 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AscendX Journal</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- Links your exact local stylesheet memory bank -->
+    <link rel="stylesheet" href="style.css?v=1.1">
+    <!-- Instant Structural Anti-Flash Canvas Mask -->
+    <style>
+        html, body { background-color: #05070b !important; } /* Forces pitch black background on immediate frame load */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #05070b; }
+        ::-webkit-scrollbar-thumb { background: #172030; border-radius: 10px; }
+        * { scrollbar-width: thin; scrollbar-color: #172030 #05070b; }
+    </style>
+        <!-- iPad / iPhone Home Screen Icon -->
+<link rel="apple-touch-icon" href="https://r2.fivemanage.com/kLZC8I7nwvbmR93N4rnea/image_5b2174d7.png">
+
+<!-- Browser Favicon -->
+<link rel="icon" type="image/png" href="https://r2.fivemanage.com/kLZC8I7nwvbmR93N4rnea/image_5b2174d7.png">
+
+<!-- PWA Settings -->
+<meta name="theme-color" content="#05070b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AscendX Journal">
 </head>
 <body>
     <div class="app-container">
-        <aside class="sidebar">
-            <div class="logo">ASCEND<span>X</span></div>
+        <!-- Sidebar Navigation Framework -->
+        <aside class="sidebar" style="display: flex; flex-direction: column; height: 100vh;">
+            <!-- Interactive Home-Button Logo Refresh Trigger -->
+            <a href="javascript:void(0)" onclick="window.location.reload();" class="logo">ASCEND<span>X</span></a>
+            
             <nav class="nav-tabs" id="accountTabs"></nav>
             <button class="add-tab-btn" id="addTabBtn">+ Add Account</button>
-            <button class="settings-toggle-btn" id="settingsBtn">⚙️ Settings</button>
+            
+            <!-- Navigation Control Deck: Fixed right above the brand signature -->
+            <div class="nav-control-deck" style="display: flex; flex-direction: column; gap: 10px; margin-top: auto; padding-bottom: 5px;">
+                <button class="settings-toggle-btn" id="newsTabBtn" style="margin-bottom: 0;">📰 Economic News</button>
+                <button class="settings-toggle-btn" id="historyTabBtn" style="margin-bottom: 0;">📜 Balance History</button>
+                <button class="settings-toggle-btn" id="settingsBtn" style="margin-bottom: 0;">⚙️ Settings</button>
+                <div class="user-email-chip" id="userEmailChip"></div>
+                <button class="logout-btn" id="logoutBtn">⎋ Log Out</button>
+            </div>
+            
+            <!-- Muted Platform Signature Baseline -->
+            <!-- FIX: Corrected typo name to Shreddykr and added the live layout version identifier -->
+            <div class="sidebar-signature" style="margin-top: 0; padding-top: 5px;">
+                <div>Made by Shreddykr</div>
+                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; letter-spacing: 0.5px;">v1.0.4-beta</div>
+                <div class="cursor-glow-circle-follower"></div>
+            </div>
         </aside>
+
+        <!-- Main Dashboard Content Window Layout -->
         <main class="main-content">
             <header class="dashboard-header">
                 <h1 id="activeAccountTitle">Select or Add an Account</h1>
                 <div class="account-badge" id="accountBadge">N/A</div>
             </header>
-            <section class="stats-grid">
-                <div class="stat-card"><h3>Net P&L</h3><div class="value" id="statNetPnL">$0.00</div></div>
-                <div class="stat-card"><h3>Win Rate</h3><div class="value" id="statWinRate">0%</div></div>
-                <div class="stat-card"><h3>Profit Factor</h3><div class="value" id="statProfitFactor">0.00</div></div>
-                <div class="stat-card"><h3>Avg Win Day</h3><div class="value" id="statAvgWin">$0.00</div></div>
-                <div class="stat-card"><h3>Avg Loss Day</h3><div class="value" id="statAvgLoss">$0.00</div></div>
-                <div class="stat-card"><h3>Green vs Red</h3><div class="value" id="statGreenRed">0 / 0</div></div>
-            </section>
-            <section class="workspace">
+
+            <!-- Full-Width Fluid Calendar Workspace Frame -->
+            <section class="workspace" id="calendarSectionView">
                 <div class="calendar-container">
                     <div class="calendar-header">
                         <button id="prevMonth">◀</button>
@@ -40,43 +75,192 @@
                     <div class="calendar-days" id="calendarDays"></div>
                 </div>
             </section>
+            <!-- Interactive Dedicated Live Embedded Economic News Panel View -->
+            <section class="workspace" id="newsSectionView" style="display: none;">
+                <div class="calendar-container" style="min-height: 600px; height: 650px; padding: 15px; display: flex; flex-direction: column; position: relative;">
+                    <div class="calendar-header" style="justify-content: flex-start; gap: 15px; margin-bottom: 15px; flex-shrink: 0; z-index: 20;">
+                        <button id="closeNewsViewBtn">◀ Back to Journal</button>
+                        <h2>Weekly High/Medium Impact Events</h2>
+                    </div>
+                    
+                    <!-- Outer Framing Window: Acts as a structural boundary crop container -->
+                    <div class="tradingview-widget-container" style="width: 100%; flex-grow: 1; min-height: 0; background: #05070b; border-radius: 8px; border: 1px solid #172030; overflow: hidden; position: relative;">
+                        <!-- Inner Crop Mask Container: Shuffled to bring time-zone control settings back center stage -->
+                        <div class="tradingview-widget-container__widget" style="width: 100%; height: 100%; overflow: hidden; position: absolute; top: 0; left: 0;">
+                            <iframe src="https://tradingeconomics.com/united-states/calendar" 
+                                    style="width: calc(100% + 220px); height: calc(100% + 95px); border: none; display: block; position: absolute; top: -95px; left: -15px; background: #05070b; filter: invert(0.93) hue-rotate(180deg) contrast(1.15) brightness(0.95);" 
+                                    scrolling="yes">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- INDEPENDENT WORKSPACE: TradingView Clone Balance History Ledger Panel View -->
+            <section class="workspace" id="tradeLogSectionView" style="display: none;">
+                <div class="calendar-container" style="min-height: 600px; height: 650px; padding: 15px; display: flex; flex-direction: column; position: relative;">
+                    
+                    <!-- Dashboard Control Action Bar Header -->
+                    <div class="calendar-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-shrink: 0;">
+                        <div style="display: flex; gap: 15px; align-items: center;">
+                            <button id="closeHistoryViewBtn">◀ Back to Journal</button>
+                            <h2>Account Balance History & Trade Ledger</h2>
+                        </div>
+                        <!-- Interactive Form Triggers and Hidden CSV Input Node Element -->
+                        <div style="display: flex; gap: 10px;">
+                            <input type="file" id="csvFileInputNode" accept=".csv" style="display: none;">
+                            <button class="settings-toggle-btn" id="triggerCsvUploadBtn" style="background: var(--panel-sub); border: 1px solid #172030; color: white; padding: 8px 15px; font-weight: bold; font-size: 0.85rem; border-radius: 6px; cursor: pointer; margin-bottom: 0;">📥 Import CSV</button>
+                            <button class="settings-toggle-btn" id="openManualTradeModalBtn" style="background: var(--neon-blue); border: 1px solid var(--neon-blue); color: #05070b; padding: 8px 15px; font-weight: bold; font-size: 0.85rem; border-radius: 6px; cursor: pointer; margin-bottom: 0;">➕ Add Trade</button>
+                        </div>
+                    </div>
+
+                    <!-- TradingView Style Header Indicators (4-Column Layout Track) -->
+                    <div style="display: grid; grid-template-columns: 140px 90px 140px 1fr; padding: 12px 20px; background: var(--panel-sub); border-radius: 6px 6px 0 0; color: var(--text-muted); font-size: 0.8rem; font-weight: bold; text-transform: uppercase; border: 1px solid #172030; border-bottom: none; flex-shrink: 0;">
+                        <div>Date/Time</div>
+                        <div>Side</div>
+                        <div style="text-align: right; padding-right: 20px;">Realized P&L</div>
+                        <div style="padding-left: 10px;">Execution / Behavioral Notes</div>
+                    </div>
+
+                    <!-- Cloned Infinite High-Density Ledger List Layout Viewport Container -->
+                    <div id="ledgerRowsViewportContainer" style="width: 100%; flex-grow: 1; min-height: 0; background: #070a0f; border-radius: 0 0 8px 8px; border: 1px solid #172030; overflow-y: auto; display: flex; flex-direction: column; padding: 5px 0;">
+                        <!-- Initial Default Empty-State Dashboard Label -->
+                        <div id="ledgerEmptyStateAnchor" style="margin: auto; text-align: center; color: var(--text-muted); font-size: 0.95rem; font-weight: 500; max-width: 400px; line-height: 1.5; padding: 40px;">
+                            No individual execution tracks found.<br>Upload a broker CSV statement or tap <span style="color: var(--neon-blue); font-weight: bold;">"Add Trade"</span> to map your micro performance trades.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Expanded Cumulative Performance Chart Panel with Section Label -->
+            <section class="chart-panel">
+                <div class="chart-title-label">CUMULATIVE NET P&L PERFORMANCE</div>
+                <canvas id="analyticsChart"></canvas>
+            </section>
+
+            <!-- ROW 1: Core Performance Statistics Matrix -->
+            <section class="stats-grid" style="margin-top: 15px;">
+                <div class="stat-card"><h3>Net P&L</h3><div class="value" id="statNetPnL">$0.00</div></div>
+                <div class="stat-card"><h3>Daily Win Rate</h3><div class="value" id="statWinRate">0%</div></div>
+                <div class="stat-card"><h3>Profit Factor</h3><div class="value" id="statProfitFactor">0.00</div></div>
+                <div class="stat-card"><h3>Avg Trades</h3><div class="value" id="statAvgTrades">0.0 / day</div></div>
+                <div class="stat-card"><h3>Green vs Red</h3><div class="value" id="statGreenRed">0 / 0</div></div>
+            </section>
+
+            <!-- ROW 2: Advanced Risk & Strategy Matrix Grid Container -->
+            <section class="stats-grid" style="margin-top: 15px;">
+                <div class="stat-card"><h3>Avg Win Size</h3><div class="value" id="statAvgWin">$0.00</div></div>
+                <div class="stat-card"><h3>Avg Loss Size</h3><div class="value" id="statAvgLoss">$0.00</div></div>
+                <div class="stat-card"><h3>Max Drawdown</h3><div class="value" id="statMaxDD">$0.00</div></div>
+                <div class="stat-card"><h3>Best Day</h3><div class="value" id="statMaxWin">$0.00</div></div>
+                <div class="stat-card"><h3>Value / Trade</h3><div class="value" id="statValPerTrade">$0.00</div></div>
+            </section>
+
+            <!-- ROW 3: Advanced Psychological Behavior & System Statistics Matrix -->
+            <section class="stats-grid" style="margin-top: 15px; margin-bottom: 10px;">
+                <div class="stat-card"><h3>Trade Edge</h3><div class="value" id="statTradeEdge">0.00</div></div>
+                <div class="stat-card"><h3>Consistency</h3><div class="value" id="statConsistency">0%</div></div>
+                <div class="stat-card"><h3>Overtrade %</h3><div class="value" id="statOvertradePct">0%</div></div>
+                <div class="stat-card"><h3>Efficiency</h3><div class="value" id="statEfficiency">0.0x</div></div>
+                <div class="stat-card"><h3>Total Trades</h3><div class="value" id="statTotalVolume">0</div></div>
+            </section>
         </main>
     </div>
+    <!-- Configuration Overlay Modals -->
     <div class="modal-overlay" id="tabModal">
         <div class="modal">
             <h2>Configure New Account Tracker</h2>
-            <div class="form-group" style="margin-top:15px;"><label>Account Name</label><input type="text" id="accName" placeholder="e.g., Topstep NQ 150k"></div>
-            <div class="form-group"><label>Market Type</label><select id="accMarket"><option value="Indices">Indices (NQ/ES)</option><option value="Stocks">Stocks</option><option value="Crypto">Crypto</option><option value="Forex">Forex</option></select></div>
+            <div class="form-group" style="margin-top:15px;"><label>Account Name</label><input type="text" id="accName" placeholder="e.g., Topstep 150k"></div>
+            <div class="form-group">
+                <label>Market Type</label>
+                <select id="accMarket">
+                    <option value="Indices">Indices</option>
+                    <option value="Stocks">Stocks</option>
+                    <option value="Metals">Metals</option>
+                    <option value="Crypto">Crypto</option>
+                    <option value="Forex">Forex</option>
+                </select>
+            </div>
             <div class="modal-actions"><button class="cancel-btn" id="closeModalBtn">Cancel</button><button class="confirm-btn" id="saveAccountBtn">Create Tracker</button></div>
         </div>
     </div>
-    
-    <!-- Updated P&L Entry Modal to Ask for Trades Count -->
+
+    <!-- Manual Entry Popup Overlay focused on 4-column metrics -->
+    <div class="modal-overlay" id="manualTradeModal">
+        <div class="modal" style="max-width: 440px;">
+            <h2>Log Trade Execution</h2>
+            
+            <div style="display: flex; gap: 15px; margin-top: 15px;">
+                <div class="form-group" style="flex: 1;">
+                    <label>Order Side</label>
+                    <select id="manualSideInput">
+                        <option value="BUY">BUY / LONG</option>
+                        <option value="SELL">SELL / SHORT</option>
+                    </select>
+                </div>
+                <div class="form-group" style="flex: 1;"><label>Realized P&L ($)</label><input type="number" id="manualPnLInput" placeholder="e.g., 450 or -120"></div>
+            </div>
+
+            <div class="form-group"><label>Execution Log / Strategy Notes</label><input type="text" id="manualNotesInput" placeholder="e.g., Close position for NAS100 at 19400"></div>
+            
+            <div class="modal-actions" style="margin-top: 25px;">
+                <button class="cancel-btn" id="closeManualTradeModalBtn">Cancel</button>
+                <button class="confirm-btn" id="saveManualTradeBtn" style="background: var(--neon-blue); border-color: var(--neon-blue); color: #05070b;">Lock In Trade Row</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Log P&L Entry Modal Overlay with Psychological Selector Deck -->
     <div class="modal-overlay" id="pnlModal">
         <div class="modal">
-            <h2 id="pnlModalTitle">Log P&L</h2>
-            <div class="form-group" style="margin-top:15px;">
-                <label>Net Profit / Loss ($)</label>
-                <input type="number" id="dailyPnLInput" placeholder="e.g., 1250 or -450">
-            </div>
+            <h2 id="pnlModalTitle">Log Performance</h2>
+            <div class="form-group" style="margin-top:15px;"><label>Net P&L ($)</label><input type="number" id="dailyPnLInput" placeholder="e.g., 1250 or -450"></div>
+            <div class="form-group"><label>Total Daily Trades</label><input type="number" id="dailyTradesInput" placeholder="e.g., 3"></div>
+            
+            <!-- Interactive Behavioral Tag Selection Grid -->
             <div class="form-group">
-                <label>Total Trades Taken</label>
-                <input type="number" id="dailyTradesInput" min="0" placeholder="e.g., 5">
+                <label style="margin-bottom: 5px; display: block;">Psychological Tags / Behavioral States</label>
+                <div class="emoji-selector-deck" style="display: flex; gap: 8px; justify-content: space-between; background: var(--panel-sub); padding: 10px; border-radius: 6px; border: 1px solid #172030;">
+                    <button type="button" class="emoji-tag-btn" data-emoji="⚡" title="FOMO / Chasing" style="flex: 1; background: #151f32; border: 1px solid #233350; color: white; padding: 8px 0; border-radius: 4px; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;">⚡</button>
+                    <button type="button" class="emoji-tag-btn" data-emoji="😡" title="Revenge Trading" style="flex: 1; background: #151f32; border: 1px solid #233350; color: white; padding: 8px 0; border-radius: 4px; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;">😡</button>
+                    <button type="button" class="emoji-tag-btn" data-emoji="⏳" title="Impatience" style="flex: 1; background: #151f32; border: 1px solid #233350; color: white; padding: 8px 0; border-radius: 4px; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;">⏳</button>
+                    <button type="button" class="emoji-tag-btn" data-emoji="🛑" title="Broke Stop Loss / Held Loser" style="flex: 1; background: #151f32; border: 1px solid #233350; color: white; padding: 8px 0; border-radius: 4px; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;">🛑</button>
+                    <button type="button" class="emoji-tag-btn" data-emoji="💎" title="Perfect Execution Plan" style="flex: 1; background: #151f32; border: 1px solid #233350; color: white; padding: 8px 0; border-radius: 4px; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;">💎</button>
+                </div>
             </div>
+
             <div class="modal-actions">
                 <button class="cancel-btn" id="closePnlModalBtn">Cancel</button>
                 <button class="confirm-btn" id="savePnLBtn">Lock In Trade</button>
             </div>
         </div>
     </div>
-    
+
+    <!-- Platform Settings Modal Window Frame -->
     <div class="modal-overlay" id="settingsModal">
         <div class="modal" style="max-width: 500px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;"><h2>Platform Settings</h2><button class="cancel-btn" id="closeSettingsBtn" style="font-size: 1.2rem;">✕</button></div>
             <div class="form-group"><label style="font-weight: bold; margin-bottom: 10px;">Manage Trackers</label><div class="account-manage-list" id="settingsAccountList"></div></div>
-            <div style="margin-top: 25px; border-top: 1px solid #172030; padding-top: 20px;"><button class="hold-wipe-btn" id="triggerGlobalWipeBtn" style="width:100%; border: 1px solid var(--neon-red); background: transparent; color: var(--neon-red); padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer;">⚠️ WIPE ENTIRE DATABASE</button></div>
+            
+            <!-- GitHub Live Build Verification Status Block Container -->
+            <div style="margin-top: 20px; border-top: 1px solid #172030; padding-top: 15px;">
+                <label style="font-size: 0.8rem; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px;">System Terminal Information</label>
+                <div style="background: var(--panel-sub); padding: 12px; border-radius: 6px; border: 1px solid #172030; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+                    <div><span style="color: var(--text-muted);">Local Build:</span> <strong style="color: var(--text-main);">v1.0.4-beta</strong></div>
+                    <div id="githubVersionStatusSlot" style="font-weight: bold; font-size: 0.8rem; padding: 3px 8px; border-radius: 4px; background: #151f32; color: var(--text-muted);">Checking GitHub...</div>
+                </div>
+            </div>
+
+            <!-- Individual ledger 5-second long-hold delete triggers -->
+            <div style="margin-top: 15px; border-top: 1px solid #172030; padding-top: 15px;">
+                <label style="font-size: 0.8rem; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px;">Ledger Administration</label>
+                <button class="hold-wipe-btn" id="triggerHistoryWipeBtn" style="width:100%; border: 1px solid #ffaa00; background: transparent; color: #ffaa00; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.2s;">🧹 CLEAR ACTIVE ACCOUNT BALANCE HISTORY</button>
+            </div>
+
+            <div style="margin-top: 15px; border-top: 1px solid #172030; padding-top: 15px;"><button class="hold-wipe-btn" id="triggerGlobalWipeBtn" style="width:100%; border: 1px solid var(--neon-red); background: transparent; color: var(--neon-red); padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer;">⚠️ WIPE ENTIRE DATABASE</button></div>
         </div>
     </div>
+
     <div class="modal-overlay" id="confirmModal" style="z-index: 200;">
         <div class="modal" style="text-align: center; max-width: 420px; border-color: var(--neon-red);">
             <div class="modal-alert-icon">⚠️</div><h2>Verification Required</h2><p id="confirmWarningText" style="color: var(--text-main); font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;"></p>
@@ -84,6 +268,7 @@
             <div style="margin-top: 20px; text-align: left;"><button class="cancel-btn" id="closeConfirmBtn">Cancel</button></div>
         </div>
     </div>
+
     <script src="app.js"></script>
 </body>
 </html>

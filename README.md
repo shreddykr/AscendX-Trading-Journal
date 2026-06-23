@@ -43,6 +43,45 @@ The application features a sleek, hardware-accelerated viewport designed to keep
 * **Personalized Undo Integration**: If you log trade data into the wrong calendar block, simply open the box, input `0` (or leave it blank) across both entry logs, and save. The calendar cell will instantly purge the index, resetting its colors back to normal.
 * **Security Hold Verification**: Interactive single-account removals and terminal database wipes require engaging a custom hold-to-confirm progress button that fills smoothly at high refresh rates.
 * **Responsive Touch-Scrolling Sidebar**: Sidebar layout handles its own internal scrolling mechanics with iOS inertial swipe physics, allowing you to access menu settings on an iPad or phone without shifting screen geometry.
+* **Multi-User Accounts & Encryption**: Each person creates their own login and gets a completely separate, independent journal file (`data/journals/user1.enc`, `user2.enc`, …). Every journal file is encrypted at rest with **AES-256-GCM**, and passwords are stored as one-way **bcrypt** hashes — never in plain text.
+* **Forgot-Password Recovery**: A built-in "Forgot password?" flow emails a time-limited reset link (valid 1 hour). Without email configured, the link is printed to the server console so resets still work locally.
+
+---
+
+## 🔐 Accounts, Login & Encryption
+
+The first time you open the site you'll land on a **Sign In / Create Account** screen that matches the dashboard theme.
+
+* **Create Account**: Enter an email + password (min 6 characters). A fresh, empty, encrypted journal file is created just for you. The very first account created on a brand-new install automatically inherits any existing `database.json` so your original single-user history is never lost.
+* **Sign In**: Log in and use the journal exactly as before — everything you see and save is scoped to *your* account only.
+* **Forgot Password**: Click "Forgot password?", enter your email, and open the reset link to choose a new password.
+* **Log Out**: Use the red **Log Out** button at the bottom of the sidebar.
+
+### Per-user data files
+
+```text
+data/
+  secret.key            # AES master key (auto-generated, keep private — back it up!)
+  users.json            # encrypted account registry (emails + bcrypt password hashes)
+  journals/
+    user1.enc           # independent encrypted journal for the 1st account
+    user2.enc           # independent encrypted journal for the 2nd account
+```
+
+The entire `data/` folder is git-ignored and never leaves your machine.
+
+### Enabling real password-reset emails (optional)
+
+Reset links print to the server console by default. To send real emails, copy `.env.example` to `.env` and fill in your SMTP details (a Gmail [App Password](https://myaccount.google.com/apppasswords) works well):
+
+```ini
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=youraddress@gmail.com
+SMTP_PASS=your_16_char_app_password
+SMTP_FROM=AscendX Journal <youraddress@gmail.com>
+```
 
 ---
 
