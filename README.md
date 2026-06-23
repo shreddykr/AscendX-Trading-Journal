@@ -44,7 +44,8 @@ The application features a sleek, hardware-accelerated viewport designed to keep
 * **Security Hold Verification**: Interactive single-account removals and terminal database wipes require engaging a custom hold-to-confirm progress button that fills smoothly at high refresh rates.
 * **Responsive Touch-Scrolling Sidebar**: Sidebar layout handles its own internal scrolling mechanics with iOS inertial swipe physics, allowing you to access menu settings on an iPad or phone without shifting screen geometry.
 * **Multi-User Accounts & Encryption**: Each person creates their own login and gets a completely separate, independent journal file (`data/journals/user1.enc`, `user2.enc`, …). Every journal file is encrypted at rest with **AES-256-GCM**, and passwords are stored as one-way **bcrypt** hashes — never in plain text.
-* **Forgot-Password Recovery**: A built-in "Forgot password?" flow emails a time-limited reset link (valid 1 hour). Without email configured, the link is printed to the server console so resets still work locally.
+* **Forgot-Password Recovery**: A built-in "Forgot password?" flow lets users reset their own password by answering the security question they chose at sign-up — no email provider or setup required.
+* **Public Domain (optional)**: Put the journal on your own Cloudflare domain with a single token file. Traffic runs through a Cloudflare Tunnel, so your home IP is never exposed and no router port-forwarding is needed. See [Going public](#-going-public-your-own-domain-via-cloudflare-tunnel).
 
 ---
 
@@ -54,7 +55,7 @@ The first time you open the site you'll land on a **Sign In / Create Account** s
 
 * **Create Account**: Enter an email + password (min 6 characters). A fresh, empty, encrypted journal file is created just for you. The very first account created on a brand-new install automatically inherits any existing `database.json` so your original single-user history is never lost.
 * **Sign In**: Log in and use the journal exactly as before — everything you see and save is scoped to *your* account only.
-* **Forgot Password**: Click "Forgot password?", enter your email, and open the reset link to choose a new password.
+* **Forgot Password**: Click "Forgot password?", enter your email to fetch the security question you chose at sign-up, answer it, and set a new password — no email needed.
 * **Log Out**: Use the red **Log Out** button at the bottom of the sidebar.
 
 ### Per-user data files
@@ -82,6 +83,55 @@ SMTP_USER=youraddress@gmail.com
 SMTP_PASS=your_16_char_app_password
 SMTP_FROM=AscendX Journal <youraddress@gmail.com>
 ```
+
+---
+
+## 🌐 Going public: your own domain via Cloudflare Tunnel
+
+Want the journal reachable from anywhere on **your own domain** instead of just your Wi-Fi? AscendX uses a **Cloudflare Tunnel**. It creates a secure outbound-only connection from your PC to Cloudflare, so:
+
+* **Your home IP stays hidden** — visitors only ever see Cloudflare, never your real address.
+* **No router/port-forwarding** — nothing is exposed on your home network.
+* **Free** — included with any domain you manage on Cloudflare.
+
+```text
+[ Visitor ] ──HTTPS──> [ Cloudflare Edge ] ──encrypted outbound tunnel──> [ Your PC: localhost:8082 ]
+                         (yourdomain.com)                                   (home IP never exposed)
+```
+
+### One-time setup (~3 minutes)
+
+> Prerequisite: your domain is already added to Cloudflare (its nameservers point to Cloudflare).
+
+1. Open the **Zero Trust** dashboard: <https://one.dash.cloudflare.com> → **Networks → Tunnels → Create a tunnel**.
+2. Choose **Cloudflared**, name it `ascendx`, and **Save**.
+3. On the install screen, choose **Windows**. You'll see a command containing `--token eyJ...` — copy **just the token** (the long string after `--token`).
+4. In your app folder (the one with `local-server.bat`), create a file named **`cloudflared.token`** and paste the token into it. Save.
+5. Back in the dashboard, open the tunnel's **Public Hostname** tab → **Add a public hostname**:
+   * **Subdomain**: leave **blank** (this serves your root domain).
+   * **Domain**: select `yourdomain.com`.
+   * **Path**: leave blank.
+   * **Service**: Type **HTTP**, URL **`localhost:8082`**.
+   * **Save**.
+
+   > Tip: to also catch `www`, add a second public hostname with subdomain `www` pointing to the same `HTTP localhost:8082`.
+
+### Launch
+
+Run `local-server.bat` exactly like before. On first run it auto-downloads the tunnel client (`cloudflared.exe`), starts the server, and connects your domain. Your site is now live at **`https://yourdomain.com`** with HTTPS handled automatically by Cloudflare.
+
+* **No `cloudflared.token` file?** The script just runs **local-only** (`http://localhost:8082`) — nothing breaks.
+* **`cloudflared.token` is private** — it's git-ignored and must never be shared or committed; anyone with it can route your tunnel.
+
+### Optional: start automatically on boot (no .bat needed)
+
+To have the tunnel run as a background Windows service that survives reboots, run once in an **Administrator** Command Prompt (paste your token):
+
+```bat
+cloudflared.exe service install <your-token>
+```
+
+The server itself (`node server.js`) still needs to be running — keep using `local-server.bat`, or set it up as its own service.
 
 ---
 
