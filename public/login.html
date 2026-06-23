@@ -44,39 +44,50 @@
                     <label>Confirm Password</label>
                     <input type="password" id="authPasswordConfirm" placeholder="••••••••" autocomplete="new-password">
                 </div>
+                <div class="form-group" id="securityQuestionGroup" style="display:none;">
+                    <label>Security Question</label>
+                    <select id="securityQuestion"></select>
+                </div>
+                <div class="form-group" id="securityAnswerGroup" style="display:none;">
+                    <label>Answer</label>
+                    <input type="text" id="securityAnswer" placeholder="Used to recover your password" autocomplete="off">
+                </div>
                 <button type="submit" class="auth-submit" id="authSubmit">Sign In</button>
                 <div class="auth-links">
                     <a href="javascript:void(0)" id="forgotLink">Forgot password?</a>
                 </div>
             </form>
 
-            <!-- FORGOT PASSWORD FORM -->
+            <!-- FORGOT PASSWORD FORM (security-question recovery, no email) -->
             <form id="forgotForm" class="auth-form" style="display:none;">
-                <p class="auth-help">Enter your account email and we'll send a link to reset your password.</p>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="forgotEmail" placeholder="you@email.com" autocomplete="email" required>
+                <!-- Step 1: identify the account -->
+                <div id="recoverStep1">
+                    <p class="auth-help">Enter your account email to look up your security question.</p>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="forgotEmail" placeholder="you@email.com" autocomplete="email">
+                    </div>
+                    <button type="button" class="auth-submit" id="forgotContinue">Continue</button>
                 </div>
-                <button type="submit" class="auth-submit" id="forgotSubmit">Send Reset Link</button>
+                <!-- Step 2: answer the question and set a new password -->
+                <div id="recoverStep2" style="display:none;">
+                    <p class="auth-help" id="recoverQuestion"></p>
+                    <div class="form-group">
+                        <label>Your Answer</label>
+                        <input type="text" id="recoverAnswer" placeholder="Your answer" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" id="recoverPassword" placeholder="••••••••" autocomplete="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" id="recoverPasswordConfirm" placeholder="••••••••" autocomplete="new-password">
+                    </div>
+                    <button type="submit" class="auth-submit" id="recoverSubmit">Reset Password</button>
+                </div>
                 <div class="auth-links">
                     <a href="javascript:void(0)" id="backToLoginLink">← Back to sign in</a>
-                </div>
-            </form>
-
-            <!-- RESET PASSWORD FORM (shown when ?token= is present) -->
-            <form id="resetForm" class="auth-form" style="display:none;">
-                <p class="auth-help">Choose a new password for your account.</p>
-                <div class="form-group">
-                    <label>New Password</label>
-                    <input type="password" id="resetPassword" placeholder="••••••••" autocomplete="new-password" required>
-                </div>
-                <div class="form-group">
-                    <label>Confirm New Password</label>
-                    <input type="password" id="resetPasswordConfirm" placeholder="••••••••" autocomplete="new-password" required>
-                </div>
-                <button type="submit" class="auth-submit" id="resetSubmit">Update Password</button>
-                <div class="auth-links">
-                    <a href="javascript:void(0)" id="resetBackLink">← Back to sign in</a>
                 </div>
             </form>
 
