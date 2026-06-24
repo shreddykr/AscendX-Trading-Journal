@@ -85,12 +85,19 @@
                     
                     <!-- Outer Framing Window: Acts as a structural boundary crop container -->
                     <div class="tradingview-widget-container" style="width: 100%; flex-grow: 1; min-height: 0; background: #05070b; border-radius: 8px; border: 1px solid #172030; overflow: hidden; position: relative;">
-                        <!-- Inner Crop Mask Container: Shuffled to bring time-zone control settings back center stage -->
-                        <div class="tradingview-widget-container__widget" style="width: 100%; height: 100%; overflow: hidden; position: absolute; top: 0; left: 0;">
-                            <iframe src="https://tradingeconomics.com/united-states/calendar" 
-                                    style="width: calc(100% + 220px); height: calc(100% + 95px); border: none; display: block; position: absolute; top: -95px; left: -15px; background: #05070b; filter: invert(0.93) hue-rotate(180deg) contrast(1.15) brightness(0.95);" 
-                                    scrolling="yes">
-                            </iframe>
+                        <!-- Official TradingView economic events widget -->
+                        <div class="tradingview-widget-container__widget" style="width: 100%; height: 100%; overflow: hidden;">
+                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+                            {
+                              "colorTheme": "dark",
+                              "isTransparent": true,
+                              "width": "100%",
+                              "height": "100%",
+                              "locale": "en",
+                              "importanceFilter": "-1,0,1",
+                              "currencyFilter": "USD,EUR,GBP,JPY,CAD,AUD,NZD,CHF"
+                            }
+                            </script>
                         </div>
                     </div>
                 </div>
