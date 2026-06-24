@@ -1,6 +1,6 @@
 # AscendX Journal Public No Download Required and enjoy the lastest updates!
 
-[#TRY NOW](https://ascendxjournal.us/home.html)
+# [TRY NOW](https://ascendxjournal.us/home.html)
 *not responsible for loss of data*
 
 # AscendX Journal ⚡
